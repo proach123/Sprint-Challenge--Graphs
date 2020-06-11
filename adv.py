@@ -28,7 +28,27 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+visted = {}
+path = []
+directions = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 
+visted[player.current_room.id] = player.current_room.get_exits()
+
+while len(visted) < len(room_graph) -1:
+    if player.current_room.id not in visted:
+        visted[player.current_room.id] = player.current_room.get_exits()
+        prev_direction = path[-1]
+        visted[player.current_room.id].remove(prev_direction)
+    
+    while len(visted[player.current_room.id]) == 0:
+        prev_direction = path.pop()
+        traversal_path.append(prev_direction)
+        player.travel(prev_direction)
+
+    move = visted[player.current_room.id].pop(0)
+    traversal_path.append(move)
+    path.append(directions[move])
+    player.travel(move)
 
 
 # TRAVERSAL TEST - DO NOT MODIFY
